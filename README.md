@@ -1,4 +1,4 @@
-# email
+# Email address suffix splicing
 write your email address
 1. When the user does not have any input, the prompt box disappears
 2. When the user enters characters, a prompt box is displayed, and the content entered by the user is automatically spelled with the mailbox suffix to display. Like "user input + @+ commonly used mailbox suffixes". 
