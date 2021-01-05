@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Write your Email</title>
+    <style>
+        *{
+            box-sizing: border-box;
+        }
+        li:hover{
+            background-color: aquamarine
+        }
+        #wrapper{
+            margin: 3rem auto;
+            width: 300px;
+        }
+        ul{
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            border:#888 1px solid;
+            text-align: center;
+        }
+        input{
+            width: 100%;
+        }
+        .active{
+            background-color: antiquewhite;
+        }
+    </style>
+</head>
+<body>
+    <div id="wrapper">
+        <input type="text" name="email" id="email">
+        <ul id="list">
+            
+        </ul>
+    </div>
+    <script>
+        let email=document.getElementById("email");
+        let list=document.getElementById("list");
+        let li;
+        let output;
+        let content;
+        let emailList=["163.com","126.com","qq.com","gmail.com","hotmail.com","usn.no","gg.com","hh.com"];
+       
+        function removeList(){
+            for(i=list.childNodes.length-1;i>0;i--){    //get current length of li-elements
+                list.removeChild(list.childNodes[i]);                           
+            }  
+        }
+        function addList(){
+            content=document.createTextNode(output);
+            li=document.createElement("li");
+            list.appendChild(li);
+            li.appendChild(content);
+        }
+        email.oninput=function(e){     //can also use .onkeyup. NOTE the logic, always remove first, then add !!!!!
+            /*delete all li*/
+            removeList();         
+            /*add all li*/
+            for(i=0;i<emailList.length;i++){
+                if(email.value.indexOf("@")===-1){    //when user DONOT input @
+                    output=email.value.trim()+"@"+emailList[i];
+                    addList();
+                }   
+                else{                                  //when user DO input @
+                    let inputEmail=email.value.indexOf("@");
+                    let show=email.value.slice(0,inputEmail+1);                    
+                    let show2=email.value.slice(inputEmail+1);
+                    let arr=[];                       //get list of matching suffix emails after @
+                    let controler=0;
+                    for(i=0;i<emailList.length;i++){
+                        if(emailList[i].indexOf(show2)===0){
+                            arr.push(show+emailList[i]);
+                            controler=1;
+                        }
+                    }
+                    for(j=0;j<arr.length;j++){      //get every single output of li elements out of array
+                        output=arr[j];
+                        addList();
+                    }
+                    if(controler===0){             //when there is no match with user input after @, shows all the items
+                        for(i=0;i<emailList.length;i++){
+                            output=show+emailList[i];
+                            addList();
+                        }
+                    }
+                }             
+                if(email.value==""){             //when there is no input, list does NOT show
+                    li.style.display="none";
+                }  
+            }
+        addEvent();
+        }
+        list.onclick=function(e){               //item shows in input once it has been clicked
+            email.value=e.target.textContent;
+            removeList();
+            email.focus();                      //cursor still focused on input even after selected by clicking
+        }
+        email.onkeyup=function(e){             //input is selected when Escape is pressed
+            if(e.keyCode==27){
+               email.select();                    
+            }
+        }
+        email.focus();                         //cursor still focused on input
+        function addEvent(){                   //add keyboard event, arrow up, arrow down, enter for selecting from list 
+            let index=0;
+            let liList=list.children;
+            liList[0].className="active";
+            window.onkeyup=function(e){      //NOTICE onkeyup event is added on window!!!
+                console.log(e.code);
+                if(e.code==="ArrowDown"){
+                    liList[index].removeAttribute("class","active");     //like this disappear-show loop, usually remove first and then add!!!!!
+                    if(index===liList.length-1){      //when it is at the last item, turn to first 
+                        liList[0].className="active";
+                        index=0;
+                    }
+                    else{
+                        liList[index+1].className="active"; 
+                        index++; 
+                    }         
+                }
+                if(e.code==="ArrowUp"){
+                    liList[index].removeAttribute("class","active");
+                    if(index===0){                 //when it is at the first item, turn to last
+                        liList[liList.length-1].className="active";
+                        index=liList.length-1;
+                    }
+                    else{
+                        liList[index-1].className="active";
+                        index--;
+                    }
+                }
+                if(e.code==="Enter"){
+                    email.value=liList[index].textContent;
+                    removeList();
+                }
+            }
+        }
+    </script>
+</body>
+</html>
