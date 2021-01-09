@@ -7,4 +7,5 @@ write your email address
 5. When the user input does not meet any suffix matching, all prompts are displayed.
 6. User can choose from the list both by clicking the item and by pressing arrowup, arrowdowm and enter from the keyboard.
 7. Background Color is added when the item is hoved or selected.
+8. Demo: http://htmlpreview.github.io/?https://github.com/chjsdmn/Email-address-suffix-splicing/blob/master/writeYourEmail.html
 
